@@ -29,7 +29,7 @@
                            <input id="numberOfItem" type="text" class="form-control text-center" value="1">
                            <button id="addItem" class="btn btn-default"><i class="fas fa-plus"></i></button>
                         </div>
-                        <h5>$1219</h5>
+                        <h5 id="phonePrice">$1219</h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -82,22 +82,26 @@
    <script>
       const addBtn = document.getElementById('addItem');
       addBtn.addEventListener('click', function () {
-         const items = document.getElementById("numberOfItem").value;
-         let numberOfItem = parseFloat(items);
-         numberOfItem += 1;
-         console.log(numberOfItem)
-         document.getElementById("numberOfItem").value = numberOfItem;
+         const increament = 1;
+         numberOFItems("numberOfItem", increament);
       })
+
+
 
       const minusBtn = document.getElementById('minusItem');
       minusBtn.addEventListener('click', function () {
-         const items = document.getElementById("numberOfItem").value;
-         let numberOfItem = parseFloat(items);
-         numberOfItem -= 1;
-         console.log(numberOfItem)
-         document.getElementById("numberOfItem").value = numberOfItem;
+         const decreament = -1;
+         numberOFItems("numberOfItem", decreament);
       })
 
+
+      function numberOFItems(id, changeItemNumber) {
+         const items = document.getElementById(id).value;
+         let numberOfItem = parseFloat(items);
+         numberOfItem += changeItemNumber;
+         console.log(numberOfItem)
+         document.getElementById(id).value = numberOfItem;
+      }
    </script>
 </body>
 
