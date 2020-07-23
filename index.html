@@ -25,11 +25,11 @@
 
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button id="minusItem" class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input id="numberOfItem" type="text" class="form-control text-center" value="1">
-                           <button id="addItem" class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button id="minusPhone" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id="numberOfPhone" type="text" class="form-control text-center" value="1">
+                           <button id="addPhone" class="btn btn-default"><i class="fas fa-plus"></i></button>
                         </div>
-                        <h5 id="phonePrice">$1219</h5>
+                        <h5>$ <span id="phonePrice">1219</span> </h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -43,12 +43,12 @@
                      </div>
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" class="form-control text-center" value="1">
-                           <button class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button id="minusPhoneCover" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id="numberOfCover" type="text" class="form-control text-center" value="1">
+                           <button id="addPhoneCover" class="btn btn-default"><i class="fas fa-plus"></i></button>
 
                         </div>
-                        <h5>$59</h5>
+                        <h5>$ <span id="coverPrice">59</span></h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -64,7 +64,7 @@
                      </div>
 
                      <div class="col-md-4 status">
-                        <h5>$1,278</h5>
+                        <h5>$<span id="subTotalPrice">1278</span></h5>
                         <h5>$0</h5>
                         <h5>$1,278</h5>
                      </div>
@@ -80,28 +80,80 @@
 
 
    <script>
-      const addBtn = document.getElementById('addItem');
-      addBtn.addEventListener('click', function () {
-         const increament = 1;
-         numberOFItems("numberOfItem", increament);
+
+      //Add Number of phone and price calculation event handler
+      const addPhoneBtn = document.getElementById('addPhone');
+      addPhoneBtn.addEventListener('click', function () {
+         const items = getItemNumber("numberOfPhone");
+         const price = getProductPrice("phonePrice")
+         const subTotal = getProductPrice('subTotalPrice');
+
+         numberOFItems("numberOfPhone", items, 1)
+         productPrice("phonePrice", price, 1219, subTotal, 'subTotalPrice');
+
+         console.log("Subtotal " + subTotal);
       })
 
 
+      //Minus Number of phone and price calculation event handler
+      const minusPhoneBtn = document.getElementById('minusPhone');
+      minusPhoneBtn.addEventListener('click', function () {
+         const items = getItemNumber("numberOfPhone");
+         const price = getProductPrice("phonePrice")
+         const subTotal = getProductPrice('subTotalPrice');
 
-      const minusBtn = document.getElementById('minusItem');
-      minusBtn.addEventListener('click', function () {
-         const decreament = -1;
-         numberOFItems("numberOfItem", decreament);
+         numberOFItems("numberOfPhone", items, -1)
+         productPrice("phonePrice", price, -1219, subTotal, 'subTotalPrice');
       })
 
 
-      function numberOFItems(id, changeItemNumber) {
+      //Add Number of Phone Cover and Price calculation event handler
+      const addCoverBtn = document.getElementById('addPhoneCover');
+      addCoverBtn.addEventListener('click', function () {
+         const items = getItemNumber("numberOfCover");
+         const price = getProductPrice("coverPrice");
+         const subTotal = getProductPrice('subTotalPrice');
+
+         numberOFItems("numberOfCover", items, 1)
+         productPrice("coverPrice", price, 59, subTotal, 'subTotalPrice');
+      })
+
+
+      //Minus Number of phone and price calculation event handler
+      const minusCoverBtn = document.getElementById('minusPhoneCover');
+      minusCoverBtn.addEventListener('click', function () {
+         const price = getProductPrice("coverPrice")
+         const items = getItemNumber("numberOfCover");
+         const subTotal = getProductPrice('subTotalPrice');
+
+         numberOFItems("numberOfCover", items, -1)
+         productPrice("coverPrice", price, -59, subTotal, 'subTotalPrice');
+      })
+
+      function getItemNumber(id) {
          const items = document.getElementById(id).value;
-         let numberOfItem = parseFloat(items);
-         numberOfItem += changeItemNumber;
-         console.log(numberOfItem)
-         document.getElementById(id).value = numberOfItem;
+         const numberOfItem = parseFloat(items);
+         return numberOfItem;
       }
+
+      function getProductPrice(id) {
+         const items = document.getElementById(id).innerText;
+         const numberOfItem = parseFloat(items);
+         return numberOfItem;
+      }
+
+      function numberOFItems(id, items, changeItemNumber) {
+         items += changeItemNumber;
+         document.getElementById(id).value = items;
+      }
+
+      function productPrice(id, price, changePrice, subTotal, subTotalId) {
+         subTotal += changePrice;
+         price += changePrice;
+         document.getElementById(id).innerText = price;
+         document.getElementById(subTotalId).innerText = subTotal;
+      }
+
    </script>
 </body>
 
