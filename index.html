@@ -66,7 +66,7 @@
                      <div class="col-md-4 status">
                         <h5>$<span id="subTotalPrice">1278</span></h5>
                         <h5>$0</h5>
-                        <h5>$1,278</h5>
+                        <h5> <span id="total">1278</span> </h5>
                      </div>
                   </div>
                </div>
@@ -87,9 +87,10 @@
          const items = getItemNumber("numberOfPhone");
          const price = getProductPrice("phonePrice")
          const subTotal = getProductPrice('subTotalPrice');
+         const total = getProductPrice('total');
 
          numberOFItems("numberOfPhone", items, 1)
-         productPrice("phonePrice", price, 1219, subTotal, 'subTotalPrice');
+         productPrice("phonePrice", price, 1219, subTotal, 'subTotalPrice', total, 'total');
 
          console.log("Subtotal " + subTotal);
       })
@@ -101,9 +102,10 @@
          const items = getItemNumber("numberOfPhone");
          const price = getProductPrice("phonePrice")
          const subTotal = getProductPrice('subTotalPrice');
+         const total = getProductPrice('total');
 
          numberOFItems("numberOfPhone", items, -1)
-         productPrice("phonePrice", price, -1219, subTotal, 'subTotalPrice');
+         productPrice("phonePrice", price, -1219, subTotal, 'subTotalPrice', total, 'total');
       })
 
 
@@ -112,10 +114,11 @@
       addCoverBtn.addEventListener('click', function () {
          const items = getItemNumber("numberOfCover");
          const price = getProductPrice("coverPrice");
+         const total = getProductPrice('total');
          const subTotal = getProductPrice('subTotalPrice');
 
          numberOFItems("numberOfCover", items, 1)
-         productPrice("coverPrice", price, 59, subTotal, 'subTotalPrice');
+         productPrice("coverPrice", price, 59, subTotal, 'subTotalPrice', total, 'total');
       })
 
 
@@ -124,10 +127,11 @@
       minusCoverBtn.addEventListener('click', function () {
          const price = getProductPrice("coverPrice")
          const items = getItemNumber("numberOfCover");
+         const total = getProductPrice('total');
          const subTotal = getProductPrice('subTotalPrice');
 
          numberOFItems("numberOfCover", items, -1)
-         productPrice("coverPrice", price, -59, subTotal, 'subTotalPrice');
+         productPrice("coverPrice", price, -59, subTotal, 'subTotalPrice', total, 'total');
       })
 
       function getItemNumber(id) {
@@ -147,11 +151,13 @@
          document.getElementById(id).value = items;
       }
 
-      function productPrice(id, price, changePrice, subTotal, subTotalId) {
+      function productPrice(id, price, changePrice, subTotal, subTotalId, total, totalId) {
          subTotal += changePrice;
+         total += changePrice;
          price += changePrice;
          document.getElementById(id).innerText = price;
          document.getElementById(subTotalId).innerText = subTotal;
+         document.getElementById(totalId).innerText = total;
       }
 
    </script>
