@@ -23,13 +23,13 @@
                         <h5>iPhone 11 128GB Black</h5>
                      </div>
 
-                     <div class="col-md-5 center-item">
+                     <div class="col-md-5 center-item calculate">
                         <div class="input-group number-spinner">
                            <button id="minusPhone" class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input id="numberOfPhone" type="text" class="form-control text-center" value="1">
+                           <input id="numberOfPhone" type="text" class="form-control text-center quantity" value="1">
                            <button id="addPhone" class="btn btn-default"><i class="fas fa-plus"></i></button>
                         </div>
-                        <h5>$ <span id="phonePrice">1219</span> </h5>
+                        <h5>$ <span id="phonePrice" class="price">1219</span> </h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -41,14 +41,13 @@
                         <img src="images/product-2.png" alt="">
                         <h5>iPhone 11 Silicone Case - Black</h5>
                      </div>
-                     <div class="col-md-5 center-item">
+                     <div class="col-md-5 center-item calculate">
                         <div class="input-group number-spinner">
                            <button id="minusPhoneCover" class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input id="numberOfCover" type="text" class="form-control text-center" value="1">
+                           <input id="numberOfCover" type="text" class="form-control text-center quantity" value="1">
                            <button id="addPhoneCover" class="btn btn-default"><i class="fas fa-plus"></i></button>
-
                         </div>
-                        <h5>$ <span id="coverPrice">59</span></h5>
+                        <h5>$ <span id="coverPrice" class="price">59</span></h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -65,8 +64,8 @@
 
                      <div class="col-md-4 status">
                         <h5>$<span id="subTotalPrice">1278</span></h5>
-                        <h5>$0</h5>
-                        <h5>$1,278</h5>
+                        <h5>$<span id="tax">25.56</span></h5>
+                        <h5>$<span id="total">1303.56</span></h5>
                      </div>
                   </div>
                </div>
@@ -80,55 +79,110 @@
 
 
    <script>
+      var removeCartItem = document.getElementsByClassName('remove-item');
+      for (let i = 0; i < removeCartItem.length; i++) {
+         const removeBtn = removeCartItem[i];
+         removeBtn.addEventListener('click', function (event) {
+            var removeBtnClicked = event.target;
+            removeBtnClicked.parentElement.parentElement.parentElement.remove()
+         })
+      }
+
+      //Input field event handler
+      const price = getProductPrice("phonePrice");
+      const coverPrice = getProductPrice("coverPrice");
+      const phn = document.getElementById('numberOfPhone');
+      phn.addEventListener('input', function () {
+         priceCalculate(price, "numberOfPhone", "phonePrice", minusPhoneBtn)
+      });
+
+
+      const phnCover = document.getElementById("numberOfCover");
+      phnCover.addEventListener('input', function () {
+         priceCalculate(coverPrice, "numberOfCover", "coverPrice", minusPhoneCover)
+      })
+
+
+      function priceCalculate(price, numberId, priceId, minus) {
+         const numberOfPhone = getItemNumber(numberId);
+         if (isNaN(numberOfPhone) || numberOfPhone == 0) {
+            const input = document.getElementById(numberId).value = "";
+            var pprice = document.getElementById(priceId).innerText = price * input;
+            minus.disabled = true;
+         }
+         else {
+            document.getElementById(priceId).innerText = price * numberOfPhone;
+            minus.disabled = false;
+         }
+         subTotalCalculation()
+         totalCalculation()
+      }
+
 
       //Add Number of phone and price calculation event handler
+      const inputValue = getItemNumber('numberOfPhone')
+      const phonePrice = getProductPrice("phonePrice");
+      const minusPhoneBtn = document.getElementById('minusPhone');
+
       const addPhoneBtn = document.getElementById('addPhone');
       addPhoneBtn.addEventListener('click', function () {
-         const items = getItemNumber("numberOfPhone");
-         const price = getProductPrice("phonePrice")
-         const subTotal = getProductPrice('subTotalPrice');
+         var numberOfProduct = getItemNumber("numberOfPhone");
+         numberOfProduct = checkIsNaN(numberOfProduct)
 
-         numberOFItems("numberOfPhone", items, 1)
-         productPrice("phonePrice", price, 1219, subTotal, 'subTotalPrice');
-
-         console.log("Subtotal " + subTotal);
+         increament("addPhone", numberOfProduct, inputValue, minusPhoneBtn)
+         const numbOfPhone = numberOFItems("numberOfPhone", numberOfProduct, inputValue)
+         productPrice(numbOfPhone, "phonePrice", phonePrice);
+         subTotalCalculation()
+         totalCalculation()
       })
 
 
       //Minus Number of phone and price calculation event handler
-      const minusPhoneBtn = document.getElementById('minusPhone');
       minusPhoneBtn.addEventListener('click', function () {
-         const items = getItemNumber("numberOfPhone");
-         const price = getProductPrice("phonePrice")
-         const subTotal = getProductPrice('subTotalPrice');
+         const numberOfProduct = getItemNumber("numberOfPhone");
 
-         numberOFItems("numberOfPhone", items, -1)
-         productPrice("phonePrice", price, -1219, subTotal, 'subTotalPrice');
+         decreament("addPhone", numberOfProduct, inputValue, minusPhoneBtn);
+         const numbOfPhone = numberOFItems("numberOfPhone", numberOfProduct, -1 * inputValue)
+         productPrice(numbOfPhone, "phonePrice", phonePrice);
+         subTotalCalculation()
+         totalCalculation()
+
       })
 
 
       //Add Number of Phone Cover and Price calculation event handler
-      const addCoverBtn = document.getElementById('addPhoneCover');
-      addCoverBtn.addEventListener('click', function () {
-         const items = getItemNumber("numberOfCover");
-         const price = getProductPrice("coverPrice");
-         const subTotal = getProductPrice('subTotalPrice');
 
-         numberOFItems("numberOfCover", items, 1)
-         productPrice("coverPrice", price, 59, subTotal, 'subTotalPrice');
-      })
+      const inputValueOfCover = getItemNumber('numberOfCover')
+      const coverAmount = getProductPrice("coverPrice");
+      const minusPhoneCover = document.getElementById('minusPhoneCover');
+
+      const addCoverrBtn = document.getElementById('addPhoneCover');
+      addCoverrBtn.addEventListener('click', function () {
+         var numbOfCover = getItemNumber("numberOfCover");
+         numbOfCover = checkIsNaN(numbOfCover)
+
+
+         increament("addPhoneCover", numbOfCover, inputValueOfCover, minusPhoneCover)
+         const numbOfItem = numberOFItems("numberOfCover", numbOfCover, inputValueOfCover)
+         productPrice(numbOfItem, "coverPrice", coverAmount);
+         subTotalCalculation()
+         totalCalculation()
+
+      });
 
 
       //Minus Number of phone and price calculation event handler
-      const minusCoverBtn = document.getElementById('minusPhoneCover');
-      minusCoverBtn.addEventListener('click', function () {
-         const price = getProductPrice("coverPrice")
-         const items = getItemNumber("numberOfCover");
-         const subTotal = getProductPrice('subTotalPrice');
+      minusPhoneCover.addEventListener('click', function () {
+         const numbOfCover = getItemNumber("numberOfCover");
 
-         numberOFItems("numberOfCover", items, -1)
-         productPrice("coverPrice", price, -59, subTotal, 'subTotalPrice');
-      })
+         decreament("addPhoneCover", numbOfCover, inputValueOfCover, minusPhoneCover)
+         const numbOfItem = numberOFItems("numberOfCover", numbOfCover, -1 * inputValueOfCover)
+         productPrice(numbOfItem, "coverPrice", coverAmount);
+         subTotalCalculation()
+         totalCalculation()
+
+      });
+
 
       function getItemNumber(id) {
          const items = document.getElementById(id).value;
@@ -142,16 +196,57 @@
          return numberOfItem;
       }
 
-      function numberOFItems(id, items, changeItemNumber) {
-         items += changeItemNumber;
-         document.getElementById(id).value = items;
+      function checkIsNaN(numberOfProduct) {
+         if (isNaN(numberOfProduct)) {
+            numberOfProduct = 0;
+         }
+         return numberOfProduct;
       }
 
-      function productPrice(id, price, changePrice, subTotal, subTotalId) {
-         subTotal += changePrice;
-         price += changePrice;
-         document.getElementById(id).innerText = price;
-         document.getElementById(subTotalId).innerText = subTotal;
+      function increament(addId, numberOfProduct, inputValue, btn) {
+         btn.disabled = false;
+         numberOfProduct += inputValue;
+
+         document.getElementById(addId).value = numberOfProduct;
+
+      }
+
+      function decreament(addId, numberOfProduct, inputValue, btn) {
+         numberOfProduct -= inputValue;
+         if (numberOfProduct <= 0) {
+            console.log(btn);
+            btn.disabled = true;
+         }
+         else {
+            document.getElementById(addId).value = numberOfProduct;
+
+         }
+      }
+
+      function numberOFItems(numberOfProductId, numberOfProduct, changeItemNumber) {
+         numberOfProduct += changeItemNumber;
+         const numberOfItems = document.getElementById(numberOfProductId).value = numberOfProduct;
+         return numberOfItems;
+      }
+
+      function productPrice(numberOfItem, priceId, price) {
+         document.getElementById(priceId).innerText = price * numberOfItem;
+      }
+
+
+      function subTotalCalculation() {
+         var phonePrice = getProductPrice("phonePrice");
+         var coverPrice = getProductPrice("coverPrice");
+         var total = phonePrice + coverPrice;
+         document.getElementById('subTotalPrice').innerText = total;
+      }
+
+      function totalCalculation() {
+         var subtotal = getProductPrice("subTotalPrice");
+         var tax = Math.round(((0.02 * subtotal) * 100) / 100);
+         var totalPrice = subtotal + tax;
+         document.getElementById('tax').innerText = tax;
+         document.getElementById('total').innerText = totalPrice;
       }
 
    </script>
